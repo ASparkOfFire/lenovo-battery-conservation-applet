@@ -1,0 +1,10 @@
+[Desktop Entry]
+
+Name=Battery Conservation Mode
+Comment=Applet for toggling Battery conservation mode present in some Lenovo laptops
+Exec=/usr/lib/lenovo-battery-conservation/lenovo-battery-conservation
+Icon=lenovo-logo
+Terminal=false
+Type=Application
+Categories=GTK;GNOME;Settings;
+StartupNotify=false

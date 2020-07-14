@@ -1,0 +1,13 @@
+#!/bin/bash
+
+SYSFS_NODE="/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode"
+MODE="$(cat $SYSFS_NODE)"
+
+	if [ $MODE == 1 ]
+	then
+		echo 0 > $SYSFS_NODE
+        echo -ne "Switched to Non-Conservation Mode"
+	else
+		echo 1 > $SYSFS_NODE
+        echo -ne "Switched to Conservation Mode"
+	fi

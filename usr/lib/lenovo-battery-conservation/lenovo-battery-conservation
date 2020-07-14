@@ -1,0 +1,124 @@
+#!/usr/bin/python3
+import gettext
+import gi
+import os
+import subprocess
+import sys
+from packaging import version
+
+gi.require_version('Gtk', '3.0')
+gi.require_version('XApp', '1.0')
+from gi.repository import Gtk, XApp
+
+# i18n
+gettext.install("lenovo-ideapad", "/usr/share/locale")
+
+CONSERVATION_MODE = _("Conservative Mode (charge upto 60%)")
+NON_CONSERVATION_MODE = _("Non-Conservative Mode")
+
+def get_output(commands):
+    process = subprocess.Popen(commands, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+    out, err = process.communicate()
+    return out.decode('utf-8').strip()
+
+class Tray:
+    def __init__(self):
+
+        self.icon = XApp.StatusIcon()
+        self.icon.set_name("lenovo-logo")
+        
+        # Find host name
+        hostname = None
+        try:
+            hostname = subprocess.check_output("cat /sys/class/dmi/id/board_vendor /sys/class/dmi/id/product_family", shell=True).decode("UTF-8")
+        except:
+            pass
+
+        # Find active mode
+        conservation = Gtk.MenuItem(label=_("Switch to: %s") % CONSERVATION_MODE)
+        conservation.connect("activate", self.switch, 'conservation_mode', CONSERVATION_MODE)
+
+        non_conservation = Gtk.MenuItem(label=_("Switch to: %s") % NON_CONSERVATION_MODE)
+        non_conservation.connect("activate", self.switch, 'non_conservation_mode', NON_CONSERVATION_MODE)
+
+        sys_output = get_output(["cat", "/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode"])
+        if (sys_output == "1"):
+            self.icon.set_icon_name("conservation_on")
+            mode = CONSERVATION_MODE
+        elif (sys_output == "0"):
+            self.icon.set_icon_name("conservation_off")
+            mode = NON_CONSERVATION_MODE
+        else:
+            self.icon.set_icon_name("dialog-error-symbolic")
+            mode = _("Unknown mode")
+
+        menu = Gtk.Menu()
+
+        if hostname is None:
+            self.icon.set_tooltip_text(mode)
+        else:
+            self.icon.set_tooltip_text("%s" % (mode))
+            item = Gtk.MenuItem(label=hostname)
+            item.set_sensitive(False)
+            menu.append(Gtk.SeparatorMenuItem())
+            menu.append(item)
+            menu.append(Gtk.SeparatorMenuItem())
+
+        item = Gtk.MenuItem(label=_("Active profile: %s") % mode)
+        item.set_sensitive(False)
+        menu.append(item)
+        
+        if mode != NON_CONSERVATION_MODE:
+            menu.append(non_conservation)
+        if mode != CONSERVATION_MODE:
+            menu.append(conservation)
+
+        menu.append(Gtk.SeparatorMenuItem())
+
+        item = Gtk.MenuItem(label=_("About"))
+        item.connect("activate", self.about)
+        menu.append(item)
+
+        item = Gtk.MenuItem(label=_("Quit"))
+        item.connect("activate", self.terminate)
+        menu.append(item)
+        menu.show_all()
+
+        self.icon.set_primary_menu(menu)
+        self.icon.set_secondary_menu(menu)
+
+    def dialog_closed(self, widget, event):
+        return Gtk.ResponseType.NO
+
+    def switch(self, widget, mode, mode_description):
+        dialog = Gtk.MessageDialog(parent=None, message_type=Gtk.MessageType.INFO, buttons=Gtk.ButtonsType.YES_NO, text=_("Are you sure you want to switch to %s?") % mode_description)
+        dialog.format_secondary_text(_('Changes will take effect after you log out and log back in.'))
+        dialog.set_deletable(False)
+        dialog.set_title("Battery Conservation Mode")
+        dialog.set_icon_name("lenovo-logo")
+        dialog.set_skip_taskbar_hint(False)
+        dialog.set_skip_pager_hint(False)
+        dialog.connect("delete_event", self.dialog_closed)
+        response = dialog.run()
+        dialog.destroy()
+        if response == Gtk.ResponseType.YES:
+            subprocess.call(["pkexec", "conservation_mode"])
+
+    def about(self, widget):
+        about = Gtk.AboutDialog()
+        about.set_program_name("Battery Conservation Mode")
+        about.set_website("https://github.com/ASparkOfFire/lenovo-battery-conservation-applet")
+        about.set_website_label("https://github.com/ASparkOfFire/lenovo-battery-conservation-applet")
+        about.set_license_type(Gtk.License.GPL_3_0)
+        about.set_logo_icon_name('lenovo-logo')
+
+        about.run()
+        about.destroy()
+
+    def terminate(self, window = None, data = None):
+        Gtk.main_quit()
+
+if __name__ == "__main__":
+
+    Tray()
+    Gtk.main()
