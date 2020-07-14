@@ -5,8 +5,7 @@
 </h1>
 <p align="center"><b>Applet to Toggle Battery Conservation Feature present in some Lenovo Laptops.</b></p>
 
-<div align="left"><img src="imgs/tray.png" alt="Tray"></div>
-<div align="right"><img src="imgs/about.png" alt="About"></div>
+<div align="left"><img src="imgs/tray.png" alt="Tray"></div><div align="right"><img src="imgs/about.png" alt="About"></div>
 
 ## Installation
 
