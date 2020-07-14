@@ -1,4 +1,4 @@
-!/bin/bash
+#!/bin/bash
 
 REPO_URL="https://github.com/ASparkOfFire/lenovo-battery-conservation-applet.git"
 DEST_DIR="$PWD/lenovo-battery-conservation-applet"
