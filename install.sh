@@ -1,4 +1,4 @@
-#!/bin/bash
+!/bin/bash
 
 REPO_URL="https://github.com/ASparkOfFire/lenovo-battery-conservation-applet.git"
 DEST_DIR="$PWD/lenovo-battery-conservation-applet"
@@ -12,8 +12,6 @@ cp -rf ./etc/xdg/autostart/lenovo-battery-conservation.desktop /etc/xdg/autostar
 cp -rf ./usr/bin/conservation_mode /usr/bin/conservation_mode;
 cp -rf ./usr/lib/lenovo-battery-conservation/lenovo-battery-conservation /usr/lib/lenovo-battery-conservation/lenovo-battery-conservation;
 cp -rf ./usr/share/icons/hicolor/scalable/status/lenovo-logo.png /usr/share/icons/hicolor/scalable/status/lenovo-logo.png;
-cp -rf ./usr/share/icons/hicolor/scalable/status/conservation_off.svg /usr/share/icons/hicolor/scalable/status/conservation_off.svg;
-cp -rf ./usr/share/icons/hicolor/scalable/status/conservation_on.svg /usr/share/icons/hicolor/scalable/status/conservation_on.svg;
 
 # change ownership
 chown root:root /etc/xdg/autostart/lenovo-battery-conservation.desktop;
@@ -21,8 +19,6 @@ chown root:root /usr/bin/conservation_mode;
 chown root:root /usr/lib/lenovo-battery-conservation/lenovo-battery-conservation;
 chown root:root /usr/lib/lenovo-battery-conservation;
 chown root:root /usr/share/icons/hicolor/scalable/status/lenovo-logo.png;
-chown root:root /usr/share/icons/hicolor/scalable/status/conservation_off.svg;
-chown root:root /usr/share/icons/hicolor/scalable/status/conservation_on.svg;
 
 # set permissions;
 
@@ -30,8 +26,6 @@ chmod 0644 /etc/xdg/autostart/lenovo-battery-conservation.desktop;
 chmod 0755 /usr/bin/conservation_mode;
 chmod 0755 /usr/lib/lenovo-battery-conservation/lenovo-battery-conservation;
 chmod 0755 /usr/lib/lenovo-battery-conservation;
-chmod 0644 /usr/share/icons/hicolor/scalable/status/lenovo-logo.png;
-chmod 0644 /usr/share/icons/hicolor/scalable/status/conservation_off.svg;
-chmod 0644 /usr/share/icons/hicolor/scalable/status/conservation_on.svg; }
+chmod 0644 /usr/share/icons/hicolor/scalable/status/lenovo-logo.png; }
 
-sudo sh -c "$(declare -f inst); inst"
+sudo sh -c "$(declare -f inst); inst";

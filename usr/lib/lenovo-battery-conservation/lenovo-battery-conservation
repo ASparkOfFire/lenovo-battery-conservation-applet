@@ -43,10 +43,10 @@ class Tray:
 
         sys_output = get_output(["cat", "/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode"])
         if (sys_output == "1"):
-            self.icon.set_icon_name("conservation_on")
+            self.icon.set_icon_name("emoji-nature-symbolic")
             mode = CONSERVATION_MODE
         elif (sys_output == "0"):
-            self.icon.set_icon_name("conservation_off")
+            self.icon.set_icon_name("sensors-voltage-symbolic")
             mode = NON_CONSERVATION_MODE
         else:
             self.icon.set_icon_name("dialog-error-symbolic")
