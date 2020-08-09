@@ -1,12 +1,17 @@
 #!/bin/bash
 
 REPO_URL="https://github.com/ASparkOfFire/lenovo-battery-conservation-applet.git"
-DEST_DIR="$PWD/lenovo-battery-conservation-applet"
+DEST_DIR="/tmp/lenovo-battery-conservation-applet"
 
 git clone $REPO_URL $DEST_DIR
 cd $DEST_DIR
 
 inst() {
+
+if [ ! -d /usr/lib/lenovo-battery-conservation ]; then
+  mkdir -p /usr/lib/lenovo-battery-conservation;
+fi
+
 # copy to system
 cp -rf ./etc/xdg/autostart/lenovo-battery-conservation.desktop /etc/xdg/autostart/lenovo-battery-conservation.desktop;
 cp -rf ./usr/bin/conservation_mode /usr/bin/conservation_mode;

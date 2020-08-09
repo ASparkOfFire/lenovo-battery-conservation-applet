@@ -9,6 +9,11 @@
 
 ## Installation
 
+### <b>Install git and curl if you havent already. </b>
+```
+sudo apt install git curl	
+```
+
 ```bash
 curl -fsSL https://raw.githubusercontent.com/ASparkOfFire/lenovo-battery-conservation-applet/master/install.sh | bash
 ```
