@@ -9,11 +9,11 @@
 
 ## Installation
 
-### <b>Install git and curl if you havent already. </b>
+### <b>1. Install git and curl if you havent already. </b>
 ```
 sudo apt install git curl	
 ```
-
+### <b>2. Install the applet.</b>
 ```bash
 curl -fsSL https://raw.githubusercontent.com/ASparkOfFire/lenovo-battery-conservation-applet/master/install.sh | bash
 ```
