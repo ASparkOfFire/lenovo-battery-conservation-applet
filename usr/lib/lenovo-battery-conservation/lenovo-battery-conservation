@@ -40,7 +40,7 @@ class Tray:
         non_conservation = Gtk.MenuItem(label=_("Switch to: %s") % NON_CONSERVATION_MODE)
         non_conservation.connect("activate", self.switch, 'non_conservation_mode', NON_CONSERVATION_MODE)
 
-        sys_output = get_output(["cat", "/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode"])
+        sys_output = get_output(["conservation_mode", "--query"])
         if (sys_output == "1"):
             self.icon.set_icon_name("emoji-nature-symbolic")
             mode = CONSERVATION_MODE

@@ -1,13 +1,42 @@
 #!/bin/bash
 
-SYSFS_NODE="/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode"
-MODE="$(cat $SYSFS_NODE)"
-
-	if [ $MODE == 1 ]
-	then
-		echo 0 > $SYSFS_NODE
-        echo -ne "Switched to Non-Conservation Mode"
-	else
-		echo 1 > $SYSFS_NODE
-        echo -ne "Switched to Conservation Mode"
+check_root() {
+	if [ "$(whoami)" != "root" ]; then
+		echo -ne "Error : You must run this program as superuser."
+		exit
 	fi
+}
+
+SYSFS_NODE="/sys/bus/platform/drivers/ideapad_acpi/VPC2004:00/conservation_mode"
+
+MODE="$@"
+
+help() {
+   echo "conservation_mode 1.2.2 by Kabir Kalsi a.k.a Kabir Kalsi"
+   echo ""
+   echo "Lenovo Battery Conservation Mode Toggle Script"
+   echo ""
+   echo "Usage: conservation_mode [argument]"
+   echo ""
+   echo "Flags: "
+   echo -e "Run without arguments to toggle conservation mode (requires superuser).)"
+   echo -e "\t -q, --query \t\t Show active mode"
+   echo -e "\t -h, --help \t\t Show this help page"
+   echo ""
+   exit 1 # Exit script after printing help
+}
+
+if [ "$MODE" == "" ]; then
+	check_root
+	if [ "$(cat "$SYSFS_NODE")" == "0" ]; then
+	echo 1 > $SYSFS_NODE
+    echo -ne "Switched to Conservation Mode"
+    else
+        echo 0 > $SYSFS_NODE
+        echo -ne "Switched to Non-Conservation Mode"
+    fi
+elif [ "$MODE" == "--query" ] || [ "$MODE" == "-q" ]; then
+    cat "$SYSFS_NODE"
+else
+    help
+fi
